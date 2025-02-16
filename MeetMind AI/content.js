@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 async function startCombinedRecording() {
   try {
-    // Tab sesini yakala
+    // Sekme sesini yakala
     const tabStream = await chrome.tabCapture.capture({
       audio: true,
       video: false,
@@ -30,19 +30,17 @@ async function startCombinedRecording() {
       video: false,
     });
 
-    // İki ses kaynağını birleştir
+    // Ses kaynaklarını birleştir
     audioContext = new AudioContext();
     mediaStreamDestination = audioContext.createMediaStreamDestination();
 
-    // Tab sesini bağla
     const tabSource = audioContext.createMediaStreamSource(tabStream);
     tabSource.connect(mediaStreamDestination);
 
-    // Mikrofon sesini bağla
     const micSource = audioContext.createMediaStreamSource(micStream);
     micSource.connect(mediaStreamDestination);
 
-    // Birleştirilmiş ses akışını Speech Recognition'a bağla
+    // Birleştirilmiş ses akışını başlat
     startSpeechRecognition(mediaStreamDestination.stream);
 
     createTranscriptionDisplay();
@@ -58,14 +56,6 @@ function startSpeechRecognition(combinedStream) {
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "tr-TR";
-
-    // Birleştirilmiş ses akışını Speech Recognition'a bağla
-    const audioContext = new AudioContext();
-    const source = audioContext.createMediaStreamSource(combinedStream);
-    const processor = audioContext.createScriptProcessor(2048, 1, 1);
-
-    source.connect(processor);
-    processor.connect(audioContext.destination);
 
     recognition.onresult = (event) => {
       let interimTranscript = "";
@@ -158,16 +148,16 @@ function stopSpeechRecognition() {
   }
 }
 
-// ... (createTranscriptionDisplay, updateTranscriptionDisplay ve diğer yardımcı fonksiyonlar aynı kalır)
-
 async function saveMeetingData(meetingData) {
   try {
     const result = await chrome.storage.local.get(["meetings"]);
     const meetings = result.meetings || [];
     meetings.push(meetingData);
     await chrome.storage.local.set({ meetings });
-    const verification = await chrome.storage.local.get(["meetings"]);
-    console.log("Kayıt sonrası storage durumu:", verification);
+    console.log(
+      "Kayıt sonrası storage durumu:",
+      await chrome.storage.local.get(["meetings"])
+    );
     return true;
   } catch (error) {
     console.error("Storage kaydetme hatası:", error);
