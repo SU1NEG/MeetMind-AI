@@ -1,0 +1,384 @@
+<!-- popup.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>MeetMind AI</title>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+
+    body {
+      width: 520px;
+      padding: 3rem;
+      background: #000000;
+      color: #ffffff;
+      font-family: "Outfit", sans-serif;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Ccircle stroke='%231F6F92' vector-effect='non-scaling-stroke' id='a' fill='none' stroke-width='4.1' r='315'/%3E%3Cuse id='f' href='%23a' stroke-dasharray='100 100 100 9999'/%3E%3Cuse id='b' href='%23a' stroke-dasharray='250 250 250 250 250 9999'/%3E%3Cuse id='e' href='%23a' stroke-dasharray='1000 500 1000 500 9999'/%3E%3Cuse id='g' href='%23a' stroke-dasharray='1500 9999'/%3E%3Cuse id='h' href='%23a' stroke-dasharray='2000 500 500 9999'/%3E%3Cuse id='j' href='%23a' stroke-dasharray='800 800 800 800 800 9999'/%3E%3Cuse id='k' href='%23a' stroke-dasharray='1200 1200 1200 1200 1200 9999'/%3E%3Cuse id='l' href='%23a' stroke-dasharray='1600 1600 1600 1600 1600 9999'/%3E%3C/defs%3E%3Cg transform='translate(1000 750)' stroke-opacity='0.1'%3E%3Cg %3E%3Ccircle fill='%231F6F92' fill-opacity='0.1' r='10'/%3E%3Cg%3E%3Cuse href='%23f' transform='scale(.1) rotate(50 0 0)' /%3E%3Cuse href='%23f' transform='scale(.2) rotate(100 0 0)' /%3E%3Cuse href='%23f' transform='scale(.3) rotate(150 0 0)' /%3E%3C/g%3E%3Cg transform=''%3E%3Cuse href='%23b' transform='scale(.4) rotate(200 0 0)' /%3E%3Cuse href='%23z' transform='scale(.5) rotate(250 0 0)' /%3E%3C/g%3E%3Cg id='z' transform=''%3E%3Cg transform=''%3E%3Cuse href='%23b'/%3E%3Cuse href='%23b' transform='scale(1.2) rotate(90 0 0)' /%3E%3Cuse href='%23b' transform='scale(1.4) rotate(60 0 0)' /%3E%3Cuse href='%23e' transform='scale(1.6) rotate(120 0 0)' /%3E%3Cuse href='%23e' transform='scale(1.8) rotate(30 0 0)' /%3E%3C/g%3E%3C/g%3E%3Cg id='y' transform=''%3E%3Cg transform=''%3E%3Cuse href='%23e' transform='scale(1.1) rotate(20 0 0)' /%3E%3Cuse href='%23g' transform='scale(1.3) rotate(-40 0 0)' /%3E%3Cuse href='%23g' transform='scale(1.5) rotate(60 0 0)' /%3E%3Cuse href='%23h' transform='scale(1.7) rotate(-80 0 0)' /%3E%3Cuse href='%23j' transform='scale(1.9) rotate(100 0 0)' /%3E%3C/g%3E%3C/g%3E%3Cg transform=''%3E%3Cg transform=''%3E%3Cg transform=''%3E%3Cuse href='%23h' transform='scale(2) rotate(60 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.1) rotate(120 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.3) rotate(180 0 0)'/%3E%3Cuse href='%23h' transform='scale(2.4) rotate(240 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.5) rotate(300 0 0)'/%3E%3C/g%3E%3Cuse href='%23y' transform='scale(2) rotate(180 0 0)' /%3E%3Cuse href='%23j' transform='scale(2.7)'/%3E%3Cuse href='%23j' transform='scale(2.8) rotate(45 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.9) rotate(90 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.1) rotate(135 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.2) rotate(180 0 0)'/%3E%3C/g%3E%3Cuse href='%23k' transform='scale(3.3) rotate(225 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.5) rotate(270 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.6) rotate(315 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.7)'/%3E%3Cuse href='%23k' transform='scale(3.9) rotate(75 0 0)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(42, 154, 202, 0.3);
+      padding-bottom: 0.3rem;
+    }
+
+    .get-started {
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    ul {
+      padding-inline-start: 20px;
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    img {
+      border-radius: 96px;
+    }
+
+    .radio-item {
+      display: flex;
+      gap: 0.5rem;
+      align-items: start;
+      margin-bottom: 2rem;
+    }
+
+    .sub-text {
+      font-size: 1rem;
+    }
+
+    input {
+      margin-top: 0.5rem;
+      accent-color: #2A9ACA;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    label {
+      margin: 0px;
+      margin-bottom: 0.25rem;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    a {
+      color: #2A9ACA;
+      font-weight: bold;
+      font-size: 1rem;
+      text-underline-offset: 4px;
+    }
+
+    button {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 1rem;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      font-family: "Outfit", sans-serif;
+      background: transparent;
+      color: #2A9ACA;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .summary-container {
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      max-height: 500px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .summary-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .summary-content {
+      font-size: 1rem;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .agent-summary {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(42, 154, 202, 0.3);
+      border-radius: 50%;
+      border-top-color: #ffffff;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 0.5rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .meeting-selector {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      border: 1px solid rgba(42, 154, 202, 0.5);
+      font-family: "Outfit", sans-serif;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .meeting-selector option {
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    .tab-container {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: 8px 16px;
+      background-color: rgba(0, 0, 0, 0.288);
+      border-radius: 4px 4px 0 0;
+      border: 1px solid rgb(0, 0, 0);
+      border-bottom: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-button.active {
+      background-color: rgba(42, 154, 202, 0.2);
+      border-color: rgba(42, 154, 202, 0.7);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .summary-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .summary-item {
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .summary-item:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .summary-item-info {
+      flex-grow: 1;
+      cursor: pointer;
+    }
+
+    .summary-item-title {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .summary-item-date {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .summary-item-button {
+      padding: 4px 8px;
+      background-color: rgba(42, 154, 202, 0.2);
+      border-radius: 4px;
+      border: 1px solid rgba(42, 154, 202, 0.5);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+
+    .summary-item-button:hover {
+      background-color: rgba(42, 154, 202, 0.3);
+    }
+
+    .error-log {
+      font-family: monospace;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      background-color: rgba(255, 0, 0, 0.1);
+      padding: 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Transcript content tab styles */
+    .transcript-content {
+      white-space: pre-line;
+      font-family: monospace;
+      line-height: 1.5;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <div style="margin-bottom: 2rem;">
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <img src="./icon.png" width="48px" height="48px" alt="Extension icon" />
+        <div>
+          <h1 style="margin: 0px;">MeetMind AI</h1>
+          <p style="margin: 0px;">
+            Basit Google Meet transkriptleri. Özel ve açık kaynaklı.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-container">
+      <div class="tab-buttons">
+        <div class="tab-button active" data-tab="settings">Ayarlar</div>
+        <div class="tab-button" data-tab="current">Mevcut Toplantı</div>
+        <div class="tab-button" data-tab="history">Toplantılar</div>
+        <div class="tab-button" data-tab="logs">Hata Kayıtları</div>
+      </div>
+
+      <!-- Ayarlar Sekmesi -->
+      <div class="tab-content active" id="tab-settings">
+        <div class="get-started">
+          <div class="radio-item">
+            <input type="radio" name="mode" id="auto-mode" />
+            <label for="auto-mode"><b>Otomatik mod</b>
+              <br /><span class="sub-text">Tüm toplantılar için transkript kaydeder</span>
+            </label>
+          </div>
+          <div class="radio-item">
+            <input type="radio" name="mode" id="manual-mode" />
+            <label for="manual-mode"><b>Manuel mod</b> <br />
+              <span class="sub-text">Google Meet'te CC simgesini kullanarak gerektiğinde transkript açın</span>
+            </label>
+          </div>
+          <p style="margin-bottom: 0rem;">Her iki modda da, transkript her toplantının sonunda kaydedilecektir.</p>
+        </div>
+      </div>
+
+      <!-- Mevcut Toplantı Sekmesi -->
+      <div class="tab-content" id="tab-current">
+        <!-- Özet içeriği için alan -->
+        <div id="summary-container" class="summary-container" style="display: block; max-height: none;">
+          <div class="summary-title">AI Asistanlar Toplantı Özeti</div>
+          <div id="summary-content" class="summary-content">Henüz özet oluşturulmadı. Özetlemek istediğiniz toplantıyı
+            seçin ve "Özetle" butonuna tıklayın.</div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <button id="summarize-transcript">Toplantıyı Özetle</button>
+          <span id="loading-indicator" class="loading" style="display: none;"></span>
+        </div>
+      </div>
+
+      <!-- Toplantılar Sekmesi -->
+      <div class="tab-content" id="tab-history">
+        <div style="margin-bottom: 1rem;">
+          <p style="font-size: 1rem; font-style: italic; color: rgba(255, 255, 255, 0.8);">
+            Toplantı başlığına tıklayarak toplantı metnini görüntüleyebilirsiniz. "Özetle" butonuyla AI asistanların
+            toplantı özetini görebilirsiniz.
+          </p>
+        </div>
+        <div class="summary-list" id="transcript-list">
+          <!-- Toplantılar JavaScript ile buraya eklenecek -->
+          <div class="summary-item">
+            <div class="summary-item-info">
+              <div class="summary-item-title">Henüz kaydedilmiş toplantı yok</div>
+              <div class="summary-item-date">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hata Kayıtları Sekmesi -->
+      <div class="tab-content" id="tab-logs">
+        <div id="error-logs">
+          <!-- Hata kayıtları JavaScript ile buraya eklenecek -->
+          <div class="error-log">Henüz hata kaydı yok.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="margin-bottom: 1rem">
+        <a href="https://github.com/SU1NEG/MeetMind-AI#readme" target="_blank">Yardım</a>
+        &nbsp; &nbsp; | &nbsp; &nbsp;
+        <a href="https://github.com/SU1NEG/MeetMind-AI/issues" target="_blank">Hata Bildir</a>
+      </div>
+      <p style="font-size: small;"><span id="version"></span> &nbsp; &nbsp; | &nbsp; &nbsp; GitHub
+        proje sayfası <span><a href="https://github.com/SU1NEG/MeetMind-AI/" target="_blank"
+            style="font-size: small; margin: 0px;">burada</a></span></p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
