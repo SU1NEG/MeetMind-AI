@@ -857,8 +857,8 @@
     <div class="tab-container">
       <div class="tab-buttons">
         <div class="tab-button active" data-tab="settings">Ayarlar</div>
-        <div class="tab-button" data-tab="current">Mevcut Toplantı</div>
         <div class="tab-button" data-tab="history">Toplantılar</div>
+        <div class="tab-button" data-tab="summary-display">Toplantı Özetleri</div>
         <div class="tab-button" data-tab="logs">Hata Kayıtları</div>
       </div>
 
@@ -886,17 +886,18 @@
       </div>
 
       <!-- Mevcut Toplantı Sekmesi -->
-      <div class="tab-content" id="tab-current">
-        <!-- Özet içeriği için alan -->
-        <div id="summary-container" class="summary-container" style="display: block; max-height: none;">
-          <div class="summary-title">AI Asistanlar Toplantı Özeti</div>
-          <div id="summary-content" class="summary-content">Henüz özet oluşturulmadı. Özetlemek istediğiniz toplantıyı
-            seçin ve "Özetle" butonuna tıklayın.</div>
-        </div>
+      <!-- Bu sekme kaldırılacak -->
 
+      <!-- Toplantı Özetleri Sekmesi (Yeni) -->
+      <div class="tab-content" id="tab-summary-display">
+        <!-- Özet içeriği için alan (önceden tab-current içindeydi) -->
+        <div id="summary-container" class="summary-container" style="display: block; max-height: none;">
+          <div class="summary-title">Toplantı Özeti</div>
+          <div id="summary-content" class="summary-content">Görüntülenecek bir özet seçin veya Toplantılar sekmesinden bir toplantıyı özetleyin.</div>
+        </div>
         <div style="margin-bottom: 1rem; text-align: center;">
-          <button id="summarize-transcript">Toplantıyı Özetle</button>
-          <span id="loading-indicator" class="loading" style="display: none;"></span>
+          <!-- Genel bir yükleme göstergesi, gerekirse popup.js'den kontrol edilecek -->
+          <span id="summary-display-loading-indicator" class="loading" style="display: none;"></span>
         </div>
       </div>
 
