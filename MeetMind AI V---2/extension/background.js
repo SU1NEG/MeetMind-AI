@@ -210,6 +210,18 @@ async function summarizeWithGemini(meetingId) {
   try {
     console.log("summarizeWithGemini called with meetingId:", meetingId);
 
+    // Get selected language from storage
+    let selectedLanguage = "tr"; // Default to Turkish
+    await new Promise((resolve) => {
+      chrome.storage.sync.get(["summaryLanguage"], function (result) {
+        if (result.summaryLanguage) {
+          selectedLanguage = result.summaryLanguage;
+        }
+        console.log("Selected summary language:", selectedLanguage);
+        resolve();
+      });
+    });
+
     // API anahtarını kontrol et
     if (!GEMINI_API_KEY || GEMINI_API_KEY === "") {
       console.error("API key is missing");
@@ -307,22 +319,22 @@ async function summarizeWithGemini(meetingId) {
     const promptTypes = [
       {
         type: "general_summary",
-        prompt: "Bu toplantı transkriptinin genel bir özetini çıkar",
+        prompt: `Bu toplantı transkriptinin genel bir özetini çıkar. Lütfen özeti ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "date_events",
         prompt:
-          "Bu toplantı transkriptinde bahsedilen tüm tarihleri ve ilgili etkinlikleri listele",
+          `Bu toplantı transkriptinde bahsedilen tüm tarihleri ve ilgili etkinlikleri listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "key_topics",
         prompt:
-          "Bu toplantı transkriptindeki önemli konuları madde madde listele",
+          `Bu toplantı transkriptindeki önemli konuları madde madde listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "tasks",
         prompt:
-          "Bu toplantı transkriptinde atanan görevleri ve sorumluları listele",
+          `Bu toplantı transkriptinde atanan görevleri ve sorumluları listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
     ];
 

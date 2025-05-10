@@ -6,40 +6,238 @@
   <title>MeetMind AI</title>
   <meta charset="UTF-8">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+
+    :root {
+      --primary: #8b5cf6;
+      --primary-darker: #7c3aed;
+      --primary-lighter: #a78bfa;
+      --accent: #c026d3;
+      --bg-main: #f5f3ff;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-item: rgba(237, 233, 254, 0.7);
+      --bg-item-hover: rgba(237, 233, 254, 0.9);
+      --bg-item-active: rgba(221, 214, 254, 0.9);
+      --text-primary: #4b5563;
+      --text-secondary: #6b7280;
+      --border-color: rgba(139, 92, 246, 0.15);
+      --border-hover: rgba(139, 92, 246, 0.3);
+      --shadow-color: rgba(139, 92, 246, 0.1);
+      --shadow-hover: rgba(139, 92, 246, 0.15);
+    }
 
     body {
       width: 520px;
       padding: 3rem;
-      background: #000000;
-      color: #ffffff;
+      background: var(--bg-main);
+      color: var(--text-primary);
       font-family: "Outfit", sans-serif;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Ccircle stroke='%231F6F92' vector-effect='non-scaling-stroke' id='a' fill='none' stroke-width='4.1' r='315'/%3E%3Cuse id='f' href='%23a' stroke-dasharray='100 100 100 9999'/%3E%3Cuse id='b' href='%23a' stroke-dasharray='250 250 250 250 250 9999'/%3E%3Cuse id='e' href='%23a' stroke-dasharray='1000 500 1000 500 9999'/%3E%3Cuse id='g' href='%23a' stroke-dasharray='1500 9999'/%3E%3Cuse id='h' href='%23a' stroke-dasharray='2000 500 500 9999'/%3E%3Cuse id='j' href='%23a' stroke-dasharray='800 800 800 800 800 9999'/%3E%3Cuse id='k' href='%23a' stroke-dasharray='1200 1200 1200 1200 1200 9999'/%3E%3Cuse id='l' href='%23a' stroke-dasharray='1600 1600 1600 1600 1600 9999'/%3E%3C/defs%3E%3Cg transform='translate(1000 750)' stroke-opacity='0.1'%3E%3Cg %3E%3Ccircle fill='%231F6F92' fill-opacity='0.1' r='10'/%3E%3Cg%3E%3Cuse href='%23f' transform='scale(.1) rotate(50 0 0)' /%3E%3Cuse href='%23f' transform='scale(.2) rotate(100 0 0)' /%3E%3Cuse href='%23f' transform='scale(.3) rotate(150 0 0)' /%3E%3C/g%3E%3Cg transform=''%3E%3Cuse href='%23b' transform='scale(.4) rotate(200 0 0)' /%3E%3Cuse href='%23z' transform='scale(.5) rotate(250 0 0)' /%3E%3C/g%3E%3Cg id='z' transform=''%3E%3Cg transform=''%3E%3Cuse href='%23b'/%3E%3Cuse href='%23b' transform='scale(1.2) rotate(90 0 0)' /%3E%3Cuse href='%23b' transform='scale(1.4) rotate(60 0 0)' /%3E%3Cuse href='%23e' transform='scale(1.6) rotate(120 0 0)' /%3E%3Cuse href='%23e' transform='scale(1.8) rotate(30 0 0)' /%3E%3C/g%3E%3C/g%3E%3Cg id='y' transform=''%3E%3Cg transform=''%3E%3Cuse href='%23e' transform='scale(1.1) rotate(20 0 0)' /%3E%3Cuse href='%23g' transform='scale(1.3) rotate(-40 0 0)' /%3E%3Cuse href='%23g' transform='scale(1.5) rotate(60 0 0)' /%3E%3Cuse href='%23h' transform='scale(1.7) rotate(-80 0 0)' /%3E%3Cuse href='%23j' transform='scale(1.9) rotate(100 0 0)' /%3E%3C/g%3E%3C/g%3E%3Cg transform=''%3E%3Cg transform=''%3E%3Cg transform=''%3E%3Cuse href='%23h' transform='scale(2) rotate(60 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.1) rotate(120 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.3) rotate(180 0 0)'/%3E%3Cuse href='%23h' transform='scale(2.4) rotate(240 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.5) rotate(300 0 0)'/%3E%3C/g%3E%3Cuse href='%23y' transform='scale(2) rotate(180 0 0)' /%3E%3Cuse href='%23j' transform='scale(2.7)'/%3E%3Cuse href='%23j' transform='scale(2.8) rotate(45 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.9) rotate(90 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.1) rotate(135 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.2) rotate(180 0 0)'/%3E%3C/g%3E%3Cuse href='%23k' transform='scale(3.3) rotate(225 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.5) rotate(270 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.6) rotate(315 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.7)'/%3E%3Cuse href='%23k' transform='scale(3.9) rotate(75 0 0)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-image:
+        radial-gradient(circle at 25% 25%, rgba(167, 139, 250, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Ccircle stroke='%238b5cf6' vector-effect='non-scaling-stroke' id='a' fill='none' stroke-width='4.1' r='315'/%3E%3Cuse id='f' href='%23a' stroke-dasharray='100 100 100 9999'/%3E%3Cuse id='b' href='%23a' stroke-dasharray='250 250 250 250 250 9999'/%3E%3Cuse id='e' href='%23a' stroke-dasharray='1000 500 1000 500 9999'/%3E%3Cuse id='g' href='%23a' stroke-dasharray='1500 9999'/%3E%3Cuse id='h' href='%23a' stroke-dasharray='2000 500 500 9999'/%3E%3Cuse id='j' href='%23a' stroke-dasharray='800 800 800 800 800 9999'/%3E%3Cuse id='k' href='%23a' stroke-dasharray='1200 1200 1200 1200 1200 9999'/%3E%3Cuse id='l' href='%23a' stroke-dasharray='1600 1600 1600 1600 1600 9999'/%3E%3C/defs%3E%3Cg transform='translate(1000 750)' stroke-opacity='0.03'%3E%3Cg %3E%3Ccircle fill='%238b5cf6' fill-opacity='0.03' r='10'/%3E%3Cg%3E%3Cuse href='%23f' transform='scale(.1) rotate(50 0 0)' /%3E%3Cuse href='%23f' transform='scale(.2) rotate(100 0 0)' /%3E%3Cuse href='%23f' transform='scale(.3) rotate(150 0 0)' /%3E%3C/g%3E%3Cg transform=''%3E%3Cuse href='%23b' transform='scale(.4) rotate(200 0 0)' /%3E%3Cuse href='%23z' transform='scale(.5) rotate(250 0 0)' /%3E%3C/g%3E%3Cg id='z' transform=''%3E%3Cg transform=''%3E%3Cuse href='%23b'/%3E%3Cuse href='%23b' transform='scale(1.2) rotate(90 0 0)' /%3E%3Cuse href='%23b' transform='scale(1.4) rotate(60 0 0)' /%3E%3Cuse href='%23e' transform='scale(1.6) rotate(120 0 0)' /%3E%3Cuse href='%23e' transform='scale(1.8) rotate(30 0 0)' /%3E%3C/g%3E%3C/g%3E%3Cg id='y' transform=''%3E%3Cg transform=''%3E%3Cuse href='%23e' transform='scale(1.1) rotate(20 0 0)' /%3E%3Cuse href='%23g' transform='scale(1.3) rotate(-40 0 0)' /%3E%3Cuse href='%23g' transform='scale(1.5) rotate(60 0 0)' /%3E%3Cuse href='%23h' transform='scale(1.7) rotate(-80 0 0)' /%3E%3Cuse href='%23j' transform='scale(1.9) rotate(100 0 0)' /%3E%3C/g%3E%3C/g%3E%3Cg transform=''%3E%3Cg transform=''%3E%3Cg transform=''%3E%3Cuse href='%23h' transform='scale(2) rotate(60 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.1) rotate(120 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.3) rotate(180 0 0)'/%3E%3Cuse href='%23h' transform='scale(2.4) rotate(240 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.5) rotate(300 0 0)'/%3E%3C/g%3E%3Cuse href='%23y' transform='scale(2) rotate(180 0 0)' /%3E%3Cuse href='%23j' transform='scale(2.7)'/%3E%3Cuse href='%23j' transform='scale(2.8) rotate(45 0 0)'/%3E%3Cuse href='%23j' transform='scale(2.9) rotate(90 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.1) rotate(135 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.2) rotate(180 0 0)'/%3E%3C/g%3E%3Cuse href='%23k' transform='scale(3.3) rotate(225 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.5) rotate(270 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.6) rotate(315 0 0)'/%3E%3Cuse href='%23k' transform='scale(3.7)'/%3E%3Cuse href='%23k' transform='scale(3.9) rotate(75 0 0)'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       background-attachment: fixed;
       background-repeat: no-repeat;
       background-size: cover;
+      margin: 0;
+      transition: all 0.3s ease;
+    }
+
+    /* Dark mode styles - Using direct styles to override everything */
+    body.dark-mode {
+      background-color: #121212 !important;
+      /* Tamamen siyah arka plan */
+      background-image: none !important;
+      /* Arka plan desenini kaldır */
+      color: #ffffff !important;
+      /* Ana metin rengi beyaz */
+    }
+
+    body.dark-mode .get-started,
+    body.dark-mode .tab-content,
+    body.dark-mode .summary-container,
+    body.dark-mode .radio-item,
+    body.dark-mode .tab-buttons,
+    body.dark-mode .settings-info,
+    body.dark-mode .agent-summary,
+    body.dark-mode .error-log,
+    body.dark-mode .transcript-content,
+    body.dark-mode .meeting-selector {
+      background-color: #1e1e1e !important;
+      /* Kartlar ve konteynerler için koyu gri */
+      color: #e0e0e0 !important;
+      /* Bu konteynerlerdeki metinler için açık gri */
+      border-color: #333333 !important;
+      /* Kenarlıklar için daha koyu gri */
+    }
+
+    body.dark-mode .radio-item.active {
+      background-color: #2a2a2a !important;
+      border-color: #8b5cf6 !important;
+      /* Aktif radio için vurgu rengi */
+    }
+
+    body.dark-mode .tab-button {
+      color: #bbbbbb !important;
+    }
+
+    body.dark-mode .tab-button.active {
+      background-color: #2a2a2a !important;
+      color: #c7d2fe !important;
+      /* Aktif tab için açık mor */
+    }
+
+    body.dark-mode .tab-button:hover:not(.active) {
+      background-color: #252525 !important;
+      color: #ffffff !important;
+    }
+
+    body.dark-mode h1 {
+      background: linear-gradient(90deg, #a78bfa, #f472b6) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+
+    body.dark-mode p,
+    body.dark-mode label,
+    body.dark-mode .summary-title,
+    body.dark-mode .summary-item-title {
+      color: #ffffff !important;
+      /* Ana başlıklar ve labeller için beyaz */
+    }
+
+    body.dark-mode .sub-text,
+    body.dark-mode .summary-item-date,
+    body.dark-mode .version-info,
+    body.dark-mode .theme-toggle-text,
+    body.dark-mode .summary-content,
+    body.dark-mode .meeting-selector {
+      /* Açılır menü metni */
+      color: #bbbbbb !important;
+      /* İkincil metinler için daha yumuşak beyaz */
+    }
+
+    body.dark-mode .meeting-selector option {
+      background-color: #1e1e1e !important;
+      /* Açılır menü seçenek arkaplanı */
+      color: #bbbbbb !important;
+      /* Açılır menü seçenek metni */
+    }
+
+    body.dark-mode button,
+    body.dark-mode .summary-item-button {
+      background: #6d28d9 !important;
+      /* Butonlar için koyu mor */
+      color: #ffffff !important;
+      /* Buton metni beyaz */
+      border: 1px solid #8b5cf6 !important;
+      /* Buton kenarlığı */
+    }
+
+    body.dark-mode button:hover,
+    body.dark-mode .summary-item-button:hover {
+      background: #5b21b6 !important;
+      /* Buton hover için daha koyu mor */
+    }
+
+    body.dark-mode a {
+      color: #a78bfa !important;
+      /* Linkler için açık mor */
+      border-bottom-color: #a78bfa !important;
+    }
+
+    body.dark-mode a:hover {
+      color: #c4b5fd !important;
+      border-bottom-color: #c4b5fd !important;
+    }
+
+    body.dark-mode input[type="radio"] {
+      box-shadow: 0 0 0 2px #4a5568 !important;
+      /* Radio buton dış gölge */
+    }
+
+    body.dark-mode input[type="radio"]:checked {
+      box-shadow: 0 0 0 2px #8b5cf6 !important;
+      /* Seçili radio dış gölge (vurgu) */
+    }
+
+    body.dark-mode input[type="radio"]:checked::after {
+      background: #8b5cf6 !important;
+      /* Seçili radio iç nokta */
+    }
+
+    body.dark-mode .slider {
+      background-color: #4a5568 !important;
+      /* Tema değiştirici slider arkaplanı */
+    }
+
+    body.dark-mode input:checked+.slider {
+      background-color: #6d28d9 !important;
+      /* Tema değiştirici aktif slider arkaplanı */
+    }
+
+    body.dark-mode ::-webkit-scrollbar-track {
+      background: #1e1e1e !important;
+    }
+
+    body.dark-mode ::-webkit-scrollbar-thumb {
+      background: #4a5568 !important;
+    }
+
+    body.dark-mode ::-webkit-scrollbar-thumb:hover {
+      background: #6d28d9 !important;
+    }
+
+    /* Logo SVG'sinin karanlık modda görünür olmasını sağla */
+    body.dark-mode .logo path {
+      fill: var(--primary-lighter);
+      /* SVG içindeki path elementleri için açık renk */
+    }
+
+    body.dark-mode .logo circle {
+      stroke: var(--primary-lighter);
+    }
+
+    body.dark-mode .theme-toggle-text {
+      color: #bbbbbb !important;
+      /* Karanlık modda "Tema" yazısı rengi */
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.025em;
     }
 
     h3 {
       margin-top: 0;
       margin-bottom: 0.5rem;
       font-size: 1.5rem;
-      color: #ffffff;
-      border-bottom: 1px solid rgba(42, 154, 202, 0.3);
-      padding-bottom: 0.3rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+      font-weight: 600;
     }
 
     .get-started {
-      padding: 1rem;
-      background-color: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(4px);
-      border-radius: 8px;
+      padding: 1.5rem;
+      background-color: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
       margin-bottom: 1.5rem;
       text-align: left;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px var(--shadow-color);
+      transition: all 0.3s ease;
+    }
+
+    .get-started:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 8px 30px var(--shadow-hover);
     }
 
     ul {
@@ -49,29 +247,78 @@
 
     p {
       font-size: 1rem;
+      line-height: 1.6;
     }
 
     img {
-      border-radius: 96px;
+      border-radius: 12px;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
     }
 
     .radio-item {
       display: flex;
-      gap: 0.5rem;
+      gap: 1rem;
       align-items: start;
       margin-bottom: 2rem;
+      padding: 1.25rem;
+      background-color: var(--bg-item);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+
+    .radio-item:hover {
+      background-color: var(--bg-item-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .radio-item.active {
+      background-color: var(--bg-item-active);
+      border-color: rgba(139, 92, 246, 0.6);
+      box-shadow: 0 0 15px var(--shadow-color);
     }
 
     .sub-text {
       font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
     }
 
-    input {
+    input[type="radio"] {
       margin-top: 0.5rem;
-      accent-color: #2A9ACA;
-      width: 18px;
-      height: 18px;
+      accent-color: #8b5cf6;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
+      position: relative;
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+      border-radius: 50%;
+    }
+
+    input[type="radio"]:checked {
+      box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.8);
+    }
+
+    input[type="radio"]:checked::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 4px;
+      left: 4px;
+      border-radius: 50%;
+      background: rgba(139, 92, 246, 0.8);
     }
 
     label {
@@ -79,68 +326,95 @@
       margin-bottom: 0.25rem;
       font-size: 1.25rem;
       cursor: pointer;
+      font-weight: 500;
+      color: var(--text-primary);
     }
 
     a {
-      color: #2A9ACA;
-      font-weight: bold;
+      color: var(--primary);
+      font-weight: 600;
       font-size: 1rem;
       text-underline-offset: 4px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-hover);
+      padding-bottom: 1px;
+    }
+
+    a:hover {
+      color: var(--primary-darker);
+      border-bottom-color: var(--primary-darker);
     }
 
     button {
       color: #ffffff;
-      font-weight: bold;
+      font-weight: 600;
       font-size: 1rem;
-      text-decoration: underline;
-      text-underline-offset: 4px;
       font-family: "Outfit", sans-serif;
-      background: transparent;
-      color: #2A9ACA;
-      font-weight: bold;
+      background: var(--primary);
+      padding: 0.6rem 1.2rem;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(139, 92, 246, 0.3);
+    }
+
+    button:hover {
+      background-color: var(--primary-darker);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(139, 92, 246, 0.4);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 3px rgba(139, 92, 246, 0.3);
     }
 
     .summary-container {
-      padding: 1rem;
-      background-color: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(4px);
-      border-radius: 8px;
+      padding: 1.5rem;
+      background-color: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
       margin-bottom: 1.5rem;
       max-height: 500px;
       overflow-y: auto;
       display: none;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px var(--shadow-color);
     }
 
     .summary-title {
       font-size: 1.25rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
     }
 
     .summary-content {
       font-size: 1rem;
-      line-height: 1.5;
+      line-height: 1.6;
       white-space: pre-line;
+      color: var(--text-secondary);
     }
 
     .agent-summary {
-      background-color: rgba(255, 255, 255, 0.05);
-      padding: 0.8rem;
-      border-radius: 6px;
+      background-color: var(--bg-item);
+      padding: 1rem;
+      border-radius: 12px;
       margin-bottom: 1.5rem;
       line-height: 1.6;
       white-space: pre-line;
+      border: 1px solid var(--border-color);
     }
 
     .loading {
       display: inline-block;
       width: 1rem;
       height: 1rem;
-      border: 2px solid rgba(42, 154, 202, 0.3);
+      border: 2px solid rgba(139, 92, 246, 0.3);
       border-radius: 50%;
-      border-top-color: #ffffff;
+      border-top-color: #8b5cf6;
       animation: spin 1s ease-in-out infinite;
       margin-left: 0.5rem;
     }
@@ -153,19 +427,19 @@
 
     .meeting-selector {
       width: 100%;
-      padding: 8px 12px;
-      border-radius: 4px;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      border: 1px solid rgba(42, 154, 202, 0.5);
+      padding: 10px 14px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #4b5563;
+      border: 1px solid rgba(139, 92, 246, 0.3);
       font-family: "Outfit", sans-serif;
       margin-bottom: 1rem;
       font-size: 1rem;
     }
 
     .meeting-selector option {
-      background-color: #000000;
-      color: #ffffff;
+      background-color: #ffffff;
+      color: #4b5563;
     }
 
     .tab-container {
@@ -178,33 +452,59 @@
       gap: 0.5rem;
       margin-bottom: 1rem;
       flex-wrap: wrap;
+      background-color: var(--bg-card);
+      padding: 0.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px var(--shadow-color);
     }
 
     .tab-button {
-      padding: 8px 16px;
-      background-color: rgba(0, 0, 0, 0.288);
-      border-radius: 4px 4px 0 0;
-      border: 1px solid rgb(0, 0, 0);
-      border-bottom: none;
+      padding: 10px 20px;
+      background-color: transparent;
+      border-radius: 8px;
+      border: none;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+      font-weight: 500;
     }
 
     .tab-button.active {
-      background-color: rgba(42, 154, 202, 0.2);
-      border-color: rgba(42, 154, 202, 0.7);
+      background-color: rgba(139, 92, 246, 0.15);
+      color: var(--primary);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .tab-button:hover:not(.active) {
+      background-color: rgba(139, 92, 246, 0.05);
+      color: var(--text-primary);
     }
 
     .tab-content {
       display: none;
-      padding: 1rem;
-      background-color: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(4px);
-      border-radius: 8px;
+      padding: 1.5rem;
+      background-color: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px var(--shadow-color);
     }
 
     .tab-content.active {
       display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .summary-list {
@@ -213,19 +513,22 @@
     }
 
     .summary-item {
-      padding: 0.75rem;
+      padding: 1rem;
       margin-bottom: 0.75rem;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
+      background-color: var(--bg-item);
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border: 1px solid var(--border-color);
     }
 
     .summary-item:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: var(--bg-item-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
     }
 
     .summary-item-info {
@@ -234,37 +537,44 @@
     }
 
     .summary-item-title {
-      font-weight: bold;
+      font-weight: 600;
       margin-bottom: 0.25rem;
+      color: var(--text-primary);
     }
 
     .summary-item-date {
       font-size: 0.85rem;
       opacity: 0.8;
+      color: var(--text-secondary);
     }
 
     .summary-item-button {
-      padding: 4px 8px;
-      background-color: rgba(42, 154, 202, 0.2);
-      border-radius: 4px;
-      border: 1px solid rgba(42, 154, 202, 0.5);
+      padding: 6px 12px;
+      background-color: rgba(139, 92, 246, 0.15);
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       transition: all 0.2s ease;
+      color: var(--primary);
     }
 
     .summary-item-button:hover {
-      background-color: rgba(42, 154, 202, 0.3);
+      background-color: rgba(139, 92, 246, 0.2);
+      border-color: var(--border-hover);
+      color: var(--primary-darker);
     }
 
     .error-log {
       font-family: monospace;
       font-size: 0.85rem;
-      line-height: 1.4;
-      background-color: rgba(255, 0, 0, 0.1);
-      padding: 0.5rem;
-      border-radius: 4px;
-      margin-bottom: 0.5rem;
+      line-height: 1.5;
+      background-color: rgba(253, 232, 232, 0.8);
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      color: #b91c1c;
     }
 
     /* Transcript content tab styles */
@@ -274,10 +584,215 @@
       line-height: 1.5;
       max-height: 400px;
       overflow-y: auto;
-      padding: 0.5rem;
-      background-color: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
+      padding: 0.75rem;
+      background-color: rgba(237, 233, 254, 0.5);
+      border-radius: 8px;
       font-size: 0.9rem;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      color: #4b5563;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .version-info {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .settings-info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: rgba(224, 231, 255, 0.6);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .dark-mode .settings-info {
+      background-color: rgba(55, 65, 81, 0.6);
+    }
+
+    .dark-mode input[type="radio"] {
+      box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.2);
+    }
+
+    .dark-mode input[type="radio"]:checked {
+      box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.8);
+    }
+
+    .dark-mode input[type="radio"]:checked::after {
+      background: rgba(167, 139, 250, 0.8);
+    }
+
+    .dark-mode .summary-item-button {
+      background-color: rgba(167, 139, 250, 0.15);
+    }
+
+    .dark-mode ::-webkit-scrollbar-track {
+      background: rgba(55, 65, 81, 0.3);
+    }
+
+    .dark-mode ::-webkit-scrollbar-thumb {
+      background: rgba(167, 139, 250, 0.3);
+    }
+
+    .dark-mode ::-webkit-scrollbar-thumb:hover {
+      background: rgba(167, 139, 250, 0.5);
+    }
+
+    /* Dark mode transition */
+    body,
+    .get-started,
+    .tab-content,
+    .tab-buttons,
+    .radio-item,
+    .summary-item,
+    input[type="radio"],
+    button,
+    a,
+    .summary-container,
+    .tab-button,
+    .summary-item-button,
+    .settings-info,
+    ::-webkit-scrollbar-thumb {
+      transition: all 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(237, 233, 254, 0.5);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.3);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.5);
+    }
+
+    .theme-switch {
+      display: inline-block;
+      height: 28px;
+      position: relative;
+      width: 50px;
+    }
+
+    .theme-switch input {
+      display: none;
+    }
+
+    .slider {
+      background-color: rgba(55, 65, 81, 0.5);
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: .4s;
+      border-radius: 28px;
+    }
+
+    .dark-mode .slider {
+      background-color: rgba(31, 41, 55, 0.7);
+    }
+
+    .slider:before {
+      background-color: #fff;
+      bottom: 4px;
+      content: "";
+      height: 20px;
+      left: 4px;
+      position: absolute;
+      transition: .4s;
+      width: 20px;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    input:checked+.slider {
+      background-color: var(--primary);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Make sure icon colors are visible in both themes */
+    .dark-mode-icon,
+    .light-mode-icon {
+      color: #fff;
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .dark-mode-icon {
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      opacity: 0;
+    }
+
+    .light-mode-icon {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+    }
+
+    .theme-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 1rem;
+    }
+
+    .theme-toggle-text {
+      margin-right: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .dark-mode .tab-button.active {
+      background-color: rgba(167, 139, 250, 0.25);
+    }
+
+    .dark-mode .tab-button:hover:not(.active) {
+      background-color: rgba(167, 139, 250, 0.1);
+    }
+
+    .dark-mode .radio-item.active {
+      border-color: rgba(167, 139, 250, 0.6);
+    }
+
+    input:checked~.dark-mode-icon {
+      opacity: 1;
+    }
+
+    input:checked~.light-mode-icon {
+      opacity: 0;
+    }
+
+    /* Rounded border-radius for dark mode cards */
+    .dark-mode .get-started,
+    .dark-mode .summary-container,
+    .dark-mode .tab-content {
+      border-radius: 18px;
     }
   </style>
 </head>
@@ -285,13 +800,56 @@
 <body>
   <div>
     <div style="margin-bottom: 2rem;">
-      <div style="display: flex; gap: 1rem; align-items: center;">
-        <img src="./icon.png" width="48px" height="48px" alt="Extension icon" />
-        <div>
-          <h1 style="margin: 0px;">MeetMind AI</h1>
-          <p style="margin: 0px;">
-            Basit Google Meet transkriptleri. Özel ve açık kaynaklı.
-          </p>
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <object data="icon.svg" type="image/svg+xml" class="logo" width="56" height="56"
+            alt="MeetMind AI Logo"></object>
+          <div style="display: flex; flex-direction: column;">
+            <h1 style="margin-bottom: 0.1rem; font-size: 2rem;">MeetMind AI</h1>
+            <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">
+              Google Meet toplantılarınız için profesyonel transkript çözümü
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div id="language-selector-popup-container"
+            style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+            <label for="language-selector-popup"
+              style="font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); white-space: nowrap;">Özet
+              Dili</label>
+            <select id="language-selector-popup" class="meeting-selector"
+              style="width: 120px; padding: 6px 10px; font-size: 0.9rem; height: 36px;">
+              <option value="tr">Türkçe</option>
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+              <option value="fr">Français</option>
+              <option value="it">Italiano</option>
+              <option value="nl">Nederlands</option>
+              <option value="ru">Русский</option>
+              <option value="pt">Português</option>
+              <option value="es">Español</option>
+              <option value="ko">한국어</option>
+              <option value="ja">日本語</option>
+            </select>
+          </div>
+          <div class="theme-toggle-container" style="margin-bottom: 0;">
+            <span class="theme-toggle-text" style="white-space: nowrap;">Tema</span>
+            <label class="theme-switch">
+              <input type="checkbox" id="theme-toggle">
+              <span class="slider"></span>
+              <svg class="dark-mode-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3a9 9 0 1 0 9 9 9.1 9.1 0 0 0-9-9zm0 16a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"
+                  fill="currentColor" />
+                <path d="M12 5a7 7 0 0 0-7 7 7.07 7.07 0 0 0 1.27 4A5 5 0 0 1 12 5z" fill="currentColor" />
+              </svg>
+              <svg class="light-mode-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" fill="currentColor" />
+                <path
+                  d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l1.41-1.41M4.93 19.07l1.41-1.41"
+                  stroke="currentColor" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" />
+              </svg>
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -307,19 +865,23 @@
       <!-- Ayarlar Sekmesi -->
       <div class="tab-content active" id="tab-settings">
         <div class="get-started">
-          <div class="radio-item">
+          <div class="radio-item" id="auto-mode-container">
             <input type="radio" name="mode" id="auto-mode" />
-            <label for="auto-mode"><b>Otomatik mod</b>
+            <label for="auto-mode">
+              <b>Otomatik mod</b>
               <br /><span class="sub-text">Tüm toplantılar için transkript kaydeder</span>
             </label>
           </div>
-          <div class="radio-item">
+          <div class="radio-item" id="manual-mode-container">
             <input type="radio" name="mode" id="manual-mode" />
-            <label for="manual-mode"><b>Manuel mod</b> <br />
+            <label for="manual-mode">
+              <b>Manuel mod</b> <br />
               <span class="sub-text">Google Meet'te CC simgesini kullanarak gerektiğinde transkript açın</span>
             </label>
           </div>
-          <p style="margin-bottom: 0rem;">Her iki modda da, transkript her toplantının sonunda kaydedilecektir.</p>
+          <div class="settings-info">
+            Her iki modda da, transkript her toplantının sonunda otomatik olarak kaydedilecektir.
+          </div>
         </div>
       </div>
 
@@ -332,7 +894,7 @@
             seçin ve "Özetle" butonuna tıklayın.</div>
         </div>
 
-        <div style="margin-bottom: 1rem;">
+        <div style="margin-bottom: 1rem; text-align: center;">
           <button id="summarize-transcript">Toplantıyı Özetle</button>
           <span id="loading-indicator" class="loading" style="display: none;"></span>
         </div>
@@ -341,7 +903,7 @@
       <!-- Toplantılar Sekmesi -->
       <div class="tab-content" id="tab-history">
         <div style="margin-bottom: 1rem;">
-          <p style="font-size: 1rem; font-style: italic; color: rgba(255, 255, 255, 0.8);">
+          <p style="font-size: 1rem; font-style: italic; color: #6b7280;">
             Toplantı başlığına tıklayarak toplantı metnini görüntüleyebilirsiniz. "Özetle" butonuyla AI asistanların
             toplantı özetini görebilirsiniz.
           </p>
@@ -366,15 +928,14 @@
       </div>
     </div>
 
-    <div>
-      <div style="margin-bottom: 1rem">
+    <div class="footer">
+      <div style="margin-bottom: 1rem; display: flex; gap: 1rem;">
         <a href="https://github.com/SU1NEG/MeetMind-AI#readme" target="_blank">Yardım</a>
-        &nbsp; &nbsp; | &nbsp; &nbsp;
         <a href="https://github.com/SU1NEG/MeetMind-AI/issues" target="_blank">Hata Bildir</a>
       </div>
-      <p style="font-size: small;"><span id="version"></span> &nbsp; &nbsp; | &nbsp; &nbsp; GitHub
-        proje sayfası <span><a href="https://github.com/SU1NEG/MeetMind-AI/" target="_blank"
-            style="font-size: small; margin: 0px;">burada</a></span></p>
+      <p class="version-info"><span id="version"></span> &nbsp; | &nbsp; GitHub
+        proje sayfası <a href="https://github.com/SU1NEG/MeetMind-AI/" target="_blank"
+          style="font-size: small;">burada</a></p>
     </div>
   </div>
 

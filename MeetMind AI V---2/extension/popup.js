@@ -11,31 +11,146 @@ window.onload = function () {
   const errorLogsContainer = document.querySelector("#error-logs");
   const tabButtons = document.querySelectorAll(".tab-button");
 
+  // New const declarations for radio button styling and theme toggle
+  const autoModeContainer = document.getElementById("auto-mode-container");
+  const manualModeContainer = document.getElementById("manual-mode-container");
+  const themeToggle = document.getElementById("theme-toggle"); // For theme toggle
+  const body = document.body; // For theme toggle
+  const languageSelectorPopup = document.getElementById("language-selector-popup"); // Updated ID for language selector
+
+  // --- Start of Theme Toggle Functionality (moved from inline) ---
+  console.log("Theme toggle script executing from popup.js.");
+
+  if (!body) {
+    console.error("document.body is not available in popup.js.");
+  }
+  if (!themeToggle) {
+    console.error(
+      "#theme-toggle element not found in popup.js. Ensure the ID in your HTML matches."
+    );
+  }
+
+  function applyTheme(isDark) {
+    if (!body) return;
+    console.log("applyTheme called with isDark:", isDark);
+    if (isDark) {
+      body.classList.add("dark-mode");
+      if (themeToggle) themeToggle.checked = true;
+    } else {
+      body.classList.remove("dark-mode");
+      if (themeToggle) themeToggle.checked = false;
+    }
+    console.log("Body classList after applyTheme:", body.classList.toString());
+    if (themeToggle)
+      console.log(
+        "Toggle checked state after applyTheme:",
+        themeToggle.checked
+      );
+  }
+
+  const storedTheme = localStorage.getItem("darkMode");
+  console.log("Stored theme from localStorage:", storedTheme);
+  if (storedTheme === "enabled") {
+    applyTheme(true);
+  } else if (storedTheme === "disabled") {
+    applyTheme(false);
+  } else {
+    console.log("No theme preference stored, or defaulting to light theme.");
+    applyTheme(false);
+  }
+
+  if (themeToggle) {
+    themeToggle.addEventListener("change", function () {
+      if (!body) return;
+      console.log(
+        "Theme toggle 'change' event fired. Checkbox is now checked:",
+        this.checked
+      );
+      if (this.checked) {
+        body.classList.add("dark-mode");
+        localStorage.setItem("darkMode", "enabled");
+        console.log(
+          "Dark Mode ENABLED by toggle. Body classList:",
+          body.classList.toString()
+        );
+      } else {
+        body.classList.remove("dark-mode");
+        localStorage.setItem("darkMode", "disabled");
+        console.log(
+          "Dark Mode DISABLED by toggle. Body classList:",
+          body.classList.toString()
+        );
+      }
+    });
+    console.log("Event listener attached to theme toggle in popup.js.");
+  } else {
+    console.warn(
+      "Could not attach event listener in popup.js: #theme-toggle element was not found."
+    );
+  }
+  // --- End of Theme Toggle Functionality ---
+
+  // --- Start of Radio Button Active Styles (moved from inline) ---
+  function updateActiveStyles() {
+    if (
+      !autoModeRadio ||
+      !manualModeRadio ||
+      !autoModeContainer ||
+      !manualModeContainer
+    ) {
+      console.warn("Radio mode elements not found for styling in popup.js");
+      return;
+    }
+    if (autoModeRadio.checked) {
+      autoModeContainer.classList.add("active");
+      manualModeContainer.classList.remove("active");
+    } else if (manualModeRadio.checked) {
+      manualModeContainer.classList.add("active");
+      autoModeContainer.classList.remove("active");
+    }
+  }
+  // --- End of Radio Button Active Styles ---
+
+  // --- Start of Language Selector Functionality ---
+  if (languageSelectorPopup) {
+    // Load saved language preference
+    chrome.storage.sync.get(["summaryLanguage"], function (result) {
+      if (result.summaryLanguage) {
+        languageSelectorPopup.value = result.summaryLanguage;
+      } else {
+        // Default to Turkish if no language is set
+        languageSelectorPopup.value = "tr";
+        chrome.storage.sync.set({ summaryLanguage: "tr" });
+      }
+    });
+
+    // Save language preference on change
+    languageSelectorPopup.addEventListener("change", function () {
+      chrome.storage.sync.set({ summaryLanguage: this.value }, function () {
+        console.log("Summary language saved:", this.value);
+      });
+    });
+  } else {
+    console.warn("#language-selector-popup element not found in popup.js");
+  }
+  // --- End of Language Selector Functionality ---
+
   document.querySelector("#version").innerHTML = `v${chrome.runtime.getManifest().version
     }`;
 
   // Tab switching functionality
   tabButtons.forEach((button) => {
     button.addEventListener("click", function () {
-      // Remove active class from all buttons and tabs
       tabButtons.forEach((btn) => btn.classList.remove("active"));
       document
         .querySelectorAll(".tab-content")
         .forEach((tab) => tab.classList.remove("active"));
-
-      // Add active class to clicked button
       this.classList.add("active");
-
-      // Show corresponding tab content
       const tabId = "tab-" + this.getAttribute("data-tab");
       document.getElementById(tabId).classList.add("active");
-
-      // If history tab is clicked, load meeting history
       if (this.getAttribute("data-tab") === "history") {
         loadTranscripts();
       }
-
-      // If logs tab is clicked, load error logs
       if (this.getAttribute("data-tab") === "logs") {
         loadErrorLogs();
       }
@@ -46,13 +161,16 @@ window.onload = function () {
     if (result.operationMode == undefined) autoModeRadio.checked = true;
     else if (result.operationMode == "auto") autoModeRadio.checked = true;
     else if (result.operationMode == "manual") manualModeRadio.checked = true;
+    updateActiveStyles(); // Call for initial state
   });
 
   autoModeRadio.addEventListener("change", function () {
     chrome.storage.sync.set({ operationMode: "auto" }, function () { });
+    updateActiveStyles(); // Call on change
   });
   manualModeRadio.addEventListener("change", function () {
     chrome.storage.sync.set({ operationMode: "manual" }, function () { });
+    updateActiveStyles(); // Call on change
   });
 
   // Check if there's already a summary available and display it
