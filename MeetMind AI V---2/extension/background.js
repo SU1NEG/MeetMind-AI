@@ -190,7 +190,7 @@ async function summarizeWithGemini(meetingId) {
   try {
     console.log("summarizeWithGemini called with meetingId:", meetingId);
 
-    let selectedLanguage = "tr";
+    let selectedLanguage = "tr"; // Default Türkçe
     await new Promise((resolve) => {
       chrome.storage.sync.get(["summaryLanguage"], function (result) {
         if (result.summaryLanguage) {
@@ -201,6 +201,7 @@ async function summarizeWithGemini(meetingId) {
       });
     });
 
+    // API anahtarını kontrol et
     if (!GEMINI_API_KEY || GEMINI_API_KEY === "") {
       console.error("API key is missing");
       return {
@@ -210,6 +211,7 @@ async function summarizeWithGemini(meetingId) {
       };
     }
 
+    // Transkript içeriğini al - önce savedTranscripts içinden almayı dene
     let transcriptData = null;
 
     await new Promise((resolve) => {
@@ -223,6 +225,7 @@ async function summarizeWithGemini(meetingId) {
       });
     });
 
+    // Eğer savedTranscripts içinde yoksa, doğrudan meetingId ile almayı dene
     if (!transcriptData) {
       await new Promise((resolve) => {
         chrome.storage.local.get([meetingId], (result) => {
@@ -236,6 +239,7 @@ async function summarizeWithGemini(meetingId) {
       });
     }
 
+    // Hala bulunamadıysa, currentTranscriptId'yi kontrol et
     if (!transcriptData) {
       await new Promise((resolve) => {
         chrome.storage.local.get(
@@ -247,6 +251,7 @@ async function summarizeWithGemini(meetingId) {
                 meetingId === result.currentTranscriptId)
             ) {
               console.log("Using current transcript content");
+              // transcriptContent'ten yeni bir transcriptData objesi oluştur
               transcriptData = {
                 content: result.transcriptContent,
                 title: "Mevcut Toplantı",
@@ -267,6 +272,7 @@ async function summarizeWithGemini(meetingId) {
       };
     }
 
+    // Transkript içeriğinin uzunluğunu kontrol et
     console.log(
       "Transcript data found, length:",
       transcriptData.content.length
@@ -281,12 +287,14 @@ async function summarizeWithGemini(meetingId) {
       };
     }
 
+    // Toplantı metni çok uzunsa maksimum 10000 karaktere kısalt (token limitlerini aşmamak için)
     let content = transcriptData.content;
     if (content.length > 10000) {
       console.log("Transcript too long, trimming to 10000 characters");
       content = content.substring(0, 10000) + "\n...(devamı kısaltıldı)";
     }
 
+    // Çoklu agent yaklaşımı için farklı prompt'lar tanımla
     const promptTypes = [
       {
         type: "general_summary",
@@ -294,25 +302,31 @@ async function summarizeWithGemini(meetingId) {
       },
       {
         type: "date_events",
-        prompt: `Bu toplantı transkriptinde bahsedilen tüm tarihleri ve ilgili etkinlikleri listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
+        prompt:
+          `Bu toplantı transkriptinde bahsedilen tüm tarihleri ve ilgili etkinlikleri listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "key_topics",
-        prompt: `Bu toplantı transkriptindeki önemli konuları madde madde listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
+        prompt:
+          `Bu toplantı transkriptindeki önemli konuları madde madde listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "tasks",
-        prompt: `Bu toplantı transkriptinde atanan görevleri ve sorumluları listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
+        prompt:
+          `Bu toplantı transkriptinde atanan görevleri ve sorumluları listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
     ];
 
+    // Tüm agetlara istekleri gönder ve sonuçları topla
     const summaryResults = {};
     console.log("Starting API requests");
 
+    // Her bir prompt için sırayla API çağrısı yap
     for (const promptItem of promptTypes) {
       try {
         console.log(`Processing prompt type: ${promptItem.type}`);
 
+        // Güncellenmiş istek formatı (gemini-2.0-flash modeli için)
         const requestBody = {
           contents: [
             {
@@ -327,6 +341,7 @@ async function summarizeWithGemini(meetingId) {
 
         console.log(`Sending API request for ${promptItem.type}...`);
 
+        // API çağrısı yap
         const url = `${GEMINI_API_ENDPOINT}?key=${GEMINI_API_KEY}`;
         console.log(`Request URL: ${url.substring(0, 60)}...`);
 
@@ -370,6 +385,7 @@ async function summarizeWithGemini(meetingId) {
         const responseData = await response.json();
         console.log(`Received response for ${promptItem.type}`);
 
+        // Yanıt formatını kontrol et ve özeti al
         if (
           responseData &&
           responseData.candidates &&
@@ -391,9 +407,11 @@ async function summarizeWithGemini(meetingId) {
         summaryResults[promptItem.type] = `API hatası: ${error.message}`;
       }
 
+      // API istekleri arasında bekle (rate limit aşmamak için)
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
+    // Özeti kaydet
     const summaryId = `summary_${meetingId}`;
     const summaryData = {
       meetingId: meetingId,
