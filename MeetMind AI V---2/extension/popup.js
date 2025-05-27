@@ -10,16 +10,14 @@ window.onload = function () {
   const errorLogsContainer = document.querySelector("#error-logs");
   const tabButtons = document.querySelectorAll(".tab-button");
 
-  // New const declarations for radio button styling and theme toggle
   const autoModeContainer = document.getElementById("auto-mode-container");
   const manualModeContainer = document.getElementById("manual-mode-container");
-  const themeToggle = document.getElementById("theme-toggle"); // For theme toggle
-  const body = document.body; // For theme toggle
+  const themeToggle = document.getElementById("theme-toggle");
+  const body = document.body;
   const languageSelectorPopup = document.getElementById(
     "language-selector-popup"
-  ); // Updated ID for language selector
+  );
 
-  // --- Start of Theme Toggle Functionality (moved from inline) ---
   console.log("Theme toggle script executing from popup.js.");
 
   if (!body) {
@@ -89,9 +87,7 @@ window.onload = function () {
       "Could not attach event listener in popup.js: #theme-toggle element was not found."
     );
   }
-  // --- End of Theme Toggle Functionality ---
 
-  // --- Start of Radio Button Active Styles (moved from inline) ---
   function updateActiveStyles() {
     if (
       !autoModeRadio ||
@@ -110,22 +106,17 @@ window.onload = function () {
       autoModeContainer.classList.remove("active");
     }
   }
-  // --- End of Radio Button Active Styles ---
 
-  // --- Start of Language Selector Functionality ---
   if (languageSelectorPopup) {
-    // Load saved language preference
     chrome.storage.sync.get(["summaryLanguage"], function (result) {
       if (result.summaryLanguage) {
         languageSelectorPopup.value = result.summaryLanguage;
       } else {
-        // Default to Turkish if no language is set
         languageSelectorPopup.value = "tr";
         chrome.storage.sync.set({ summaryLanguage: "tr" });
       }
     });
 
-    // Save language preference on change
     languageSelectorPopup.addEventListener("change", function () {
       chrome.storage.sync.set({ summaryLanguage: this.value }, function () {
         console.log("Summary language saved:", this.value);
@@ -134,13 +125,11 @@ window.onload = function () {
   } else {
     console.warn("#language-selector-popup element not found in popup.js");
   }
-  // --- End of Language Selector Functionality ---
 
   document.querySelector("#version").innerHTML = `v${
     chrome.runtime.getManifest().version
   }`;
 
-  // Tab switching functionality
   tabButtons.forEach((button) => {
     button.addEventListener("click", function () {
       tabButtons.forEach((btn) => btn.classList.remove("active"));
@@ -163,57 +152,50 @@ window.onload = function () {
     if (result.operationMode == undefined) autoModeRadio.checked = true;
     else if (result.operationMode == "auto") autoModeRadio.checked = true;
     else if (result.operationMode == "manual") manualModeRadio.checked = true;
-    updateActiveStyles(); // Call for initial state
+    updateActiveStyles();
   });
 
   autoModeRadio.addEventListener("change", function () {
     chrome.storage.sync.set({ operationMode: "auto" }, function () {});
-    updateActiveStyles(); // Call on change
+    updateActiveStyles();
   });
   manualModeRadio.addEventListener("change", function () {
     chrome.storage.sync.set({ operationMode: "manual" }, function () {});
-    updateActiveStyles(); // Call on change
+    updateActiveStyles();
   });
 
-  // Listen for message from background script that summary is ready
   chrome.runtime.onMessage.addListener(function (
     message,
     sender,
     sendResponse
   ) {
     if (message.type === "summary_ready") {
-      // Hide loading indicator for the new tab
       if (summaryDisplayLoadingIndicator)
         summaryDisplayLoadingIndicator.style.display = "none";
 
-      // Re-enable buttons in the history list if any were disabled for this summarization
       const processedButton = document.querySelector(
         `.summary-item-button[data-id="${message.meetingId}"][data-processing="true"]`
       );
       if (processedButton) {
         processedButton.disabled = false;
-        processedButton.textContent = "Özeti Gör"; // Artık özet hazır
+        processedButton.textContent = "Özeti Gör";
         processedButton.removeAttribute("data-processing");
       }
 
-      // Display the summary for the meeting ID in the new tab
       displaySummary(message.meetingId);
     } else if (message.type === "summarization_error") {
-      // Hide loading indicator for the new tab
       if (summaryDisplayLoadingIndicator)
         summaryDisplayLoadingIndicator.style.display = "none";
 
-      // Re-enable buttons in the history list
       const processedButton = document.querySelector(
         `.summary-item-button[data-id="${message.meetingId}"][data-processing="true"]`
       );
       if (processedButton) {
         processedButton.disabled = false;
-        processedButton.textContent = "Özetle"; // Hata oluştu, tekrar özetlenebilir
+        processedButton.textContent = "Özetle";
         processedButton.removeAttribute("data-processing");
       }
 
-      // Show error message in the new summary tab
       if (summaryContainer) summaryContainer.style.display = "block";
       if (summaryContent) {
         summaryContent.innerHTML = `<div class="agent-summary" style="background-color: rgba(255, 0, 0, 0.1);">
@@ -224,19 +206,16 @@ window.onload = function () {
         </div>`;
       }
 
-      // Switch to summary display tab to show the error
       tabButtons.forEach((btn) => {
         if (btn.getAttribute("data-tab") === "summary-display") {
-          btn.click(); // Sekmeyi aktif hale getir
+          btn.click();
         }
       });
 
-      // Log to console
       console.error("Summarization error:", message.message);
     }
   });
 
-  // Function to display a summary in the new "Toplantı Özetleri" tab
   function displaySummary(meetingId) {
     const summaryId = `summary_${meetingId}`;
 
@@ -247,10 +226,8 @@ window.onload = function () {
 
         if (summaryContainer) summaryContainer.style.display = "block";
 
-        // Çoklu ajan formatında özeti görüntüle
         let summaryHTML = "";
 
-        // Toplantı başlığını ve tarihini ekle
         summaryHTML += `<div style="margin-bottom: 1rem;">
                           <h2 style="margin-bottom: 0.5rem;">${
                             summaryData.title
@@ -260,25 +237,21 @@ window.onload = function () {
                           ).toLocaleString()}</p>
                         </div>`;
 
-        // Genel Özet
         summaryHTML += `<h3>Genel Özet</h3>
                         <div class="agent-summary">${formatContent(
                           summary.general_summary
                         )}</div>`;
 
-        // Tarihler ve Etkinlikler
         summaryHTML += `<h3>Tarihler ve Etkinlikler</h3>
                         <div class="agent-summary">${formatContent(
                           summary.date_events
                         )}</div>`;
 
-        // Önemli Konular
         summaryHTML += `<h3>Önemli Konular</h3>
                         <div class="agent-summary">${formatContent(
                           summary.key_topics
                         )}</div>`;
 
-        // Görevler
         summaryHTML += `<h3>Görevler ve Sorumlular</h3>
                         <div class="agent-summary">${formatContent(
                           summary.tasks
@@ -286,10 +259,9 @@ window.onload = function () {
 
         if (summaryContent) summaryContent.innerHTML = summaryHTML;
 
-        // Switch to summary display tab to show the summary
         tabButtons.forEach((btn) => {
           if (btn.getAttribute("data-tab") === "summary-display") {
-            btn.click(); // Sekmeyi aktif hale getir
+            btn.click();
           }
         });
       } else {
@@ -299,7 +271,6 @@ window.onload = function () {
             <strong>Uyarı:</strong> Özet bulunamadı (${meetingId}). Lütfen tekrar deneyin veya hata kayıtları sekmesini kontrol edin.
             </div>`;
         }
-        // Switch to summary display tab to show the warning
         tabButtons.forEach((btn) => {
           if (btn.getAttribute("data-tab") === "summary-display") {
             btn.click();
@@ -309,11 +280,9 @@ window.onload = function () {
     });
   }
 
-  // Format content to add links to URLs and handle API errors
   function formatContent(content) {
     if (!content) return "<em>Bilgi yok</em>";
 
-    // API yanıtı alınamadı hata mesajlarını işle
     if (
       content.startsWith("API yanıtı alınamadı") ||
       content.startsWith("API hatası:")
@@ -324,7 +293,6 @@ window.onload = function () {
               </div>`;
     }
 
-    // Beklenmeyen API yanıtı hata mesajlarını işle
     if (content === "Beklenmeyen API yanıtı.") {
       return `<div style="color: #ff9e57; padding: 10px; background-color: rgba(255, 160, 0, 0.05); border-radius: 4px;">
                 <strong>⚠️ Beklenmeyen API yanıtı</strong>
@@ -332,14 +300,12 @@ window.onload = function () {
               </div>`;
     }
 
-    // Replace URLs with clickable links
     return content.replace(
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi,
       '<a href="$&" target="_blank">$&</a>'
     );
   }
 
-  // Function to summarize a transcript or view its summary (called from History tab items)
   function summarizeOrViewTranscript(id) {
     const summaryId = `summary_${id}`;
     const button = document.querySelector(
@@ -352,26 +318,22 @@ window.onload = function () {
         const transcript =
           result.savedTranscripts && result.savedTranscripts[id];
 
-        // Set this as the current transcript ID (still useful if summarization fails and user retries)
         chrome.storage.local.set({ currentTranscriptId: id }, function () {
           if (result[summaryId]) {
-            // If summary already exists, show it in the summary display tab
             displaySummary(id);
             if (button) {
               button.disabled = false;
-              button.textContent = "Özeti Gör"; // Text might already be this, but ensure state
+              button.textContent = "Özeti Gör";
             }
           } else if (transcript) {
-            // If summary doesn't exist, create one
             if (summaryDisplayLoadingIndicator)
               summaryDisplayLoadingIndicator.style.display = "inline-block";
             if (button) {
               button.disabled = true;
               button.textContent = "Özetleniyor...";
-              button.setAttribute("data-processing", "true"); // Mark button as processing
+              button.setAttribute("data-processing", "true");
             }
 
-            // Kullanıcıya bilgi ver (Toplantı Özetleri sekmesinde)
             if (summaryContainer) summaryContainer.style.display = "block";
             if (summaryContent) {
               summaryContent.innerHTML = `<div class="agent-summary">
@@ -383,14 +345,12 @@ window.onload = function () {
               </div>`;
             }
 
-            // Switch to summary display tab to show loading
             tabButtons.forEach((btn) => {
               if (btn.getAttribute("data-tab") === "summary-display") {
                 btn.click();
               }
             });
 
-            // Send message to background script to summarize
             chrome.runtime.sendMessage({
               type: "summarize_transcript",
               meetingId: id,
@@ -407,7 +367,6 @@ window.onload = function () {
     );
   }
 
-  // Function to load transcript list
   function loadTranscripts() {
     chrome.storage.local.get(["savedTranscripts"], function (result) {
       const transcripts = result.savedTranscripts || {};
@@ -425,16 +384,13 @@ window.onload = function () {
         return;
       }
 
-      // Sort transcripts by date (newest first)
       transcriptIds.sort((a, b) => {
         const dateA = new Date(transcripts[a].date);
         const dateB = new Date(transcripts[b].date);
         return dateB - dateA;
       });
 
-      // Generate HTML for each transcript
       let html = "";
-      // Get all existing summary IDs to check against
       chrome.storage.local.get(null, function (allStorage) {
         const summaryKeys = Object.keys(allStorage).filter((key) =>
           key.startsWith("summary_")
@@ -461,15 +417,13 @@ window.onload = function () {
 
         transcriptListContainer.innerHTML = html;
 
-        // Add click event for each summary button
         document.querySelectorAll(".summary-item-button").forEach((button) => {
           button.addEventListener("click", function () {
             const id = this.getAttribute("data-id");
-            summarizeOrViewTranscript(id); // This function now handles both cases
+            summarizeOrViewTranscript(id);
           });
         });
 
-        // Add click event for transcript title and info section to view raw transcript
         document
           .querySelectorAll(".summary-item-info")
           .forEach((infoSection) => {
@@ -482,17 +436,14 @@ window.onload = function () {
     });
   }
 
-  // Yeni fonksiyon: Toplantı metnini görüntüle
   function viewTranscriptContent(id) {
     chrome.storage.local.get(["savedTranscripts"], function (result) {
       const transcripts = result.savedTranscripts || {};
 
       if (transcripts[id]) {
-        // Yeni tab oluştur
         const tabButtons = document.querySelectorAll(".tab-button");
         const tabContents = document.querySelectorAll(".tab-content");
 
-        // Önceki transcript content tabını kaldır
         const existingTab = document.getElementById("tab-transcript-content");
         const existingTabButton = document.querySelector(
           '.tab-button[data-tab="transcript-content"]'
@@ -506,18 +457,15 @@ window.onload = function () {
           existingTabButton.remove();
         }
 
-        // Yeni tab button oluştur
         const newTabButton = document.createElement("div");
         newTabButton.className = "tab-button";
         newTabButton.setAttribute("data-tab", "transcript-content");
         newTabButton.textContent = "Toplantı Metni";
 
-        // Yeni tab content oluştur
         const newTabContent = document.createElement("div");
         newTabContent.className = "tab-content";
         newTabContent.id = "tab-transcript-content";
 
-        // Toplantı metnini formatlı göster
         newTabContent.innerHTML = `
           <div>
             <h3>${transcripts[id].title}</h3>
@@ -528,14 +476,12 @@ window.onload = function () {
           </div>
         `;
 
-        // Tab butonunu ve içeriğini ekle
         const tabButtonsContainer = document.querySelector(".tab-buttons");
         tabButtonsContainer.appendChild(newTabButton);
 
         const tabContainer = document.querySelector(".tab-container");
         tabContainer.appendChild(newTabContent);
 
-        // Tab değiştirme işlevselliğini ekle
         newTabButton.addEventListener("click", function () {
           tabButtons.forEach((btn) => btn.classList.remove("active"));
           tabContents.forEach((tab) => tab.classList.remove("active"));
@@ -544,13 +490,11 @@ window.onload = function () {
           newTabContent.classList.add("active");
         });
 
-        // Yeni taba geç
         newTabButton.click();
       }
     });
   }
 
-  // Function to load error logs
   function loadErrorLogs() {
     chrome.storage.local.get(["errorLogs"], function (result) {
       const logs = result.errorLogs || [];
@@ -560,12 +504,10 @@ window.onload = function () {
         return;
       }
 
-      // Sort logs by timestamp (newest first)
       logs.sort((a, b) => {
         return new Date(b.timestamp) - new Date(a.timestamp);
       });
 
-      // Generate HTML for each log entry
       let html = "";
       logs.forEach((log) => {
         html += `
@@ -590,6 +532,5 @@ window.onload = function () {
     });
   }
 
-  // Initial load of transcripts in history tab
   loadTranscripts();
 };

@@ -33,13 +33,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
     summarizeWithGemini(meetingId).then(function (result) {
       if (result.success) {
-        // Notify UI that summary is ready
         chrome.runtime.sendMessage({
           type: "summary_ready",
           meetingId: meetingId,
         });
       } else {
-        // Log error and notify UI about the error
         logError("summarization_error", result.error);
         chrome.runtime.sendMessage({
           type: "summarization_error",
@@ -53,7 +51,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
   if (message.type === "get_summaries") {
     chrome.storage.local.get(null, function (result) {
-      // Filter keys to find all summaries
       const summaryKeys = Object.keys(result).filter((key) =>
         key.startsWith("summary_")
       );
@@ -69,7 +66,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   }
 
   if (message.type == "new_meeting_started") {
-    // Saving current tab id, to download transcript when this tab is closed
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const tabId = tabs[0].id;
       chrome.storage.local.set({ meetingTabId: tabId }, function () {
@@ -78,7 +74,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     });
   }
   if (message.type == "download") {
-    // Invalidate tab id since transcript is downloaded, prevents double downloading of transcript from tab closed event listener
     chrome.storage.local.set({ meetingTabId: null }, function () {
       console.log("Meeting tab id cleared");
     });
@@ -100,13 +95,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   return true;
 });
 
-// Toplantı sekmesi kapandığında transcript'i kaydet
 chrome.tabs.onRemoved.addListener(function (tabid) {
   chrome.storage.local.get(["meetingTabId"], function (data) {
     if (tabid == data.meetingTabId) {
       console.log("Successfully intercepted tab close");
       saveTranscriptToStorage();
-      // Clearing meetingTabId to prevent misfires of onRemoved until next meeting actually starts
       chrome.storage.local.set({ meetingTabId: null }, function () {
         console.log("Meeting tab id cleared for next meeting");
       });
@@ -114,7 +107,6 @@ chrome.tabs.onRemoved.addListener(function (tabid) {
   });
 });
 
-// Yeni fonksiyon: Transcript'i localStorage'a kaydet
 function saveTranscriptToStorage() {
   chrome.storage.local.get(
     [
@@ -129,20 +121,16 @@ function saveTranscriptToStorage() {
         result.userName &&
         (result.transcript.length > 0 || result.chatMessages.length > 0)
       ) {
-        // Create an array to store lines of the text file
         const lines = [];
 
-        // Toplantı başlığı oluştur
         const meetingTitle = result.meetingTitle || "Toplantı";
         const meetingTime =
           result.meetingStartTimeStamp || new Date().toLocaleString();
 
         if (result.transcript.length > 0) {
-          // Iterate through the transcript array and format each entry
           result.transcript.forEach((entry) => {
             lines.push(`${entry.personName} (${entry.timeStamp})`);
             lines.push(entry.personTranscript);
-            // Add an empty line between entries
             lines.push("");
           });
           lines.push("");
@@ -150,38 +138,32 @@ function saveTranscriptToStorage() {
         }
 
         if (result.chatMessages.length > 0) {
-          // Iterate through the chat messages array and format each entry
           lines.push("---------------");
           lines.push("CHAT MESSAGES");
           lines.push("---------------");
           result.chatMessages.forEach((entry) => {
             lines.push(`${entry.personName} (${entry.timeStamp})`);
             lines.push(entry.chatMessageText);
-            // Add an empty line between entries
             lines.push("");
           });
           lines.push("");
           lines.push("");
         }
 
-        // Add branding
         lines.push("---------------");
         lines.push("Transcript saved using MeetMind AI Chrome extension");
         lines.push("---------------");
 
-        // Join the lines into a single string, replace "You" with userName from storage
         const textContent = lines
           .join("\n")
           .replace(/You \(/g, result.userName + " (");
 
-        // Save transcript with ID for later selection
         const meetingId = saveTranscriptWithId(
           textContent,
           meetingTitle,
           meetingTime
         );
 
-        // Save the transcript content to storage for use with Gemini
         chrome.storage.local.set(
           {
             transcriptContent: textContent,
@@ -200,18 +182,15 @@ function saveTranscriptToStorage() {
   );
 }
 
-// API anahtarı bilgileri - dene/geliştir durumunda değiştirilebilir
 const GEMINI_API_KEY = "AIzaSyAouVx_k0BhdlXECUNKXqW9Ze1YPRGprM0";
 const GEMINI_API_ENDPOINT =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
-// Function to call Gemini API to summarize the transcript
 async function summarizeWithGemini(meetingId) {
   try {
     console.log("summarizeWithGemini called with meetingId:", meetingId);
 
-    // Get selected language from storage
-    let selectedLanguage = "tr"; // Default to Turkish
+    let selectedLanguage = "tr";
     await new Promise((resolve) => {
       chrome.storage.sync.get(["summaryLanguage"], function (result) {
         if (result.summaryLanguage) {
@@ -222,7 +201,6 @@ async function summarizeWithGemini(meetingId) {
       });
     });
 
-    // API anahtarını kontrol et
     if (!GEMINI_API_KEY || GEMINI_API_KEY === "") {
       console.error("API key is missing");
       return {
@@ -232,7 +210,6 @@ async function summarizeWithGemini(meetingId) {
       };
     }
 
-    // Transkript içeriğini al - önce savedTranscripts içinden almayı dene
     let transcriptData = null;
 
     await new Promise((resolve) => {
@@ -246,7 +223,6 @@ async function summarizeWithGemini(meetingId) {
       });
     });
 
-    // Eğer savedTranscripts içinde yoksa, doğrudan meetingId ile almayı dene
     if (!transcriptData) {
       await new Promise((resolve) => {
         chrome.storage.local.get([meetingId], (result) => {
@@ -260,7 +236,6 @@ async function summarizeWithGemini(meetingId) {
       });
     }
 
-    // Hala bulunamadıysa, currentTranscriptId'yi kontrol et
     if (!transcriptData) {
       await new Promise((resolve) => {
         chrome.storage.local.get(
@@ -272,7 +247,6 @@ async function summarizeWithGemini(meetingId) {
                 meetingId === result.currentTranscriptId)
             ) {
               console.log("Using current transcript content");
-              // transcriptContent'ten yeni bir transcriptData objesi oluştur
               transcriptData = {
                 content: result.transcriptContent,
                 title: "Mevcut Toplantı",
@@ -293,7 +267,6 @@ async function summarizeWithGemini(meetingId) {
       };
     }
 
-    // Transkript içeriğinin uzunluğunu kontrol et
     console.log(
       "Transcript data found, length:",
       transcriptData.content.length
@@ -308,14 +281,12 @@ async function summarizeWithGemini(meetingId) {
       };
     }
 
-    // Toplantı metni çok uzunsa maksimum 10000 karaktere kısalt (token limitlerini aşmamak için)
     let content = transcriptData.content;
     if (content.length > 10000) {
       console.log("Transcript too long, trimming to 10000 characters");
       content = content.substring(0, 10000) + "\n...(devamı kısaltıldı)";
     }
 
-    // Çoklu ajan yaklaşımı için farklı prompt'lar tanımla
     const promptTypes = [
       {
         type: "general_summary",
@@ -323,31 +294,25 @@ async function summarizeWithGemini(meetingId) {
       },
       {
         type: "date_events",
-        prompt:
-          `Bu toplantı transkriptinde bahsedilen tüm tarihleri ve ilgili etkinlikleri listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
+        prompt: `Bu toplantı transkriptinde bahsedilen tüm tarihleri ve ilgili etkinlikleri listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "key_topics",
-        prompt:
-          `Bu toplantı transkriptindeki önemli konuları madde madde listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
+        prompt: `Bu toplantı transkriptindeki önemli konuları madde madde listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
       {
         type: "tasks",
-        prompt:
-          `Bu toplantı transkriptinde atanan görevleri ve sorumluları listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
+        prompt: `Bu toplantı transkriptinde atanan görevleri ve sorumluları listele. Lütfen listeyi ${selectedLanguage} dilinde oluştur. `,
       },
     ];
 
-    // Tüm ajanlara istekleri gönder ve sonuçları topla
     const summaryResults = {};
     console.log("Starting API requests");
 
-    // Her bir prompt için sırayla API çağrısı yap
     for (const promptItem of promptTypes) {
       try {
         console.log(`Processing prompt type: ${promptItem.type}`);
 
-        // Güncellenmiş istek formatı (gemini-2.0-flash modeli için)
         const requestBody = {
           contents: [
             {
@@ -362,7 +327,6 @@ async function summarizeWithGemini(meetingId) {
 
         console.log(`Sending API request for ${promptItem.type}...`);
 
-        // API çağrısı yap
         const url = `${GEMINI_API_ENDPOINT}?key=${GEMINI_API_KEY}`;
         console.log(`Request URL: ${url.substring(0, 60)}...`);
 
@@ -406,7 +370,6 @@ async function summarizeWithGemini(meetingId) {
         const responseData = await response.json();
         console.log(`Received response for ${promptItem.type}`);
 
-        // Yanıt formatını kontrol et ve özeti al
         if (
           responseData &&
           responseData.candidates &&
@@ -428,11 +391,9 @@ async function summarizeWithGemini(meetingId) {
         summaryResults[promptItem.type] = `API hatası: ${error.message}`;
       }
 
-      // API istekleri arasında bekle (rate limit aşmamak için)
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
-    // Özeti kaydet
     const summaryId = `summary_${meetingId}`;
     const summaryData = {
       meetingId: meetingId,
@@ -457,7 +418,6 @@ async function summarizeWithGemini(meetingId) {
   }
 }
 
-// Function to log errors
 function logError(source, message, details = null) {
   const errorLog = {
     source,
@@ -468,22 +428,18 @@ function logError(source, message, details = null) {
 
   console.error("Error logged:", errorLog);
 
-  // Get existing error logs
   chrome.storage.local.get(["errorLogs"], function (result) {
     const logs = result.errorLogs || [];
     logs.push(errorLog);
 
-    // Keep only last 100 errors
     if (logs.length > 100) {
       logs.shift();
     }
 
-    // Save updated logs
     chrome.storage.local.set({ errorLogs: logs });
   });
 }
 
-// Function to save transcript with ID for later selection
 function saveTranscriptWithId(transcriptContent, meetingTitle, meetingTime) {
   const meetingId = Date.now().toString();
 
