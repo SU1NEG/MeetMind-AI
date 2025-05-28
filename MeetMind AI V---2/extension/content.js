@@ -281,7 +281,7 @@ function transcriptMutationCallback(mutationsList, observer) {
       const transcriptRoot = document.querySelector(peopleSelector);
 
       if (!transcriptRoot) {
-        // console.warn("Transcript root element not found:", peopleSelector);
+        console.warn("Transcript root element not found:", peopleSelector);
         return; // Skip this mutation if root is not found
       }
 
@@ -290,7 +290,7 @@ function transcriptMutationCallback(mutationsList, observer) {
         : transcriptRoot.childNodes[1]?.firstChild?.childNodes;
 
       if (!people) {
-        // console.warn("People collection not found or invalid structure.");
+        console.warn("People collection not found or invalid structure.");
         return; // Skip if structure to get people is broken
       }
 
@@ -301,13 +301,13 @@ function transcriptMutationCallback(mutationsList, observer) {
         const person = people[personIndex];
 
         if (!person) {
-          // console.warn("Person element at index", personIndex, "not found.");
+          console.warn("Person element at index", personIndex, "not found.");
           return; // Skip if person element is missing
         }
 
         // CRITICAL DOM DEPENDENCY - Check for childNodes and their existence
         if (!person.childNodes || person.childNodes.length < 2) {
-          // console.warn("Person element does not have expected childNodes structure.", person);
+          console.warn("Person element does not have expected childNodes structure.", person);
           return; // Skip if structure is not as expected
         }
 
@@ -318,21 +318,41 @@ function transcriptMutationCallback(mutationsList, observer) {
           !personNameElement ||
           typeof personNameElement.textContent === "undefined"
         ) {
-          // console.warn("Person name element or its textContent is missing.");
+          console.warn("Person name element or its textContent is missing.");
           return; // Skip if name element is invalid
         }
         const currentPersonName = personNameElement.textContent;
 
-        if (
-          !transcriptTextContainer ||
-          !transcriptTextContainer.lastChild ||
-          typeof transcriptTextContainer.lastChild.textContent === "undefined"
-        ) {
-          // console.warn("Transcript text container, its lastChild, or textContent is missing.");
-          return; // Skip if transcript text element is invalid
+        // FIXED: Handle both old and new DOM structures for transcript text extraction
+        let currentTranscriptText = "";
+
+        if (transcriptTextContainer) {
+          // First try the new structure - direct textContent from the container
+          if (transcriptTextContainer.textContent && transcriptTextContainer.textContent.trim()) {
+            currentTranscriptText = transcriptTextContainer.textContent.trim();
+          }
+          // Fallback to old structure - lastChild textContent for backwards compatibility
+          else if (transcriptTextContainer.lastChild && transcriptTextContainer.lastChild.textContent) {
+            currentTranscriptText = transcriptTextContainer.lastChild.textContent.trim();
+          }
+          // Additional fallback - check for span elements (old structure)
+          else {
+            const spans = transcriptTextContainer.querySelectorAll('span');
+            if (spans.length > 0) {
+              currentTranscriptText = Array.from(spans)
+                .map(span => span.textContent)
+                .join(' ')
+                .trim();
+            }
+          }
         }
-        const currentTranscriptText =
-          transcriptTextContainer.lastChild.textContent;
+
+        if (!currentTranscriptText) {
+          console.warn("No transcript text found in container.");
+          return; // Skip if no transcript text is available
+        }
+
+        console.log("Extracted transcript text:", currentTranscriptText);
 
         if (beforeTranscriptText == "") {
           personNameBuffer = currentPersonName;
